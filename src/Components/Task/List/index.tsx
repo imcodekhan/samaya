@@ -7,9 +7,9 @@ type ListProps = {
   tasks: TaskListType;
   handleAction: (
     action: string,
-    payload: { id: number; date?: Date | null }
+    payload: { id: string; date?: Date | null }
   ) => void;
-  handleEditTask: (values: FormDataType, id: number) => void;
+  handleEditTask: (values: FormDataType, id: string) => void;
 };
 
 const List = (props: ListProps) => {
