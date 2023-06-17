@@ -1,11 +1,8 @@
-import { Button, Container, Flex, Select } from "@mantine/core";
-import { useState } from "react";
-import List from "./List";
-import { FILTER_OPTIONS, STATUS, dummyData } from "./constant";
-import AddTask from "../../Pages/AddTask";
+import { STATUS, dummyData } from "./constant";
 import { formatAddFormValuesToTask, formatEditFormValuesToTask } from "./utils";
 import { FormDataType } from "../Form";
 import View from "./View";
+import { useState } from "react";
 
 export type TaskType = {
   id: number;

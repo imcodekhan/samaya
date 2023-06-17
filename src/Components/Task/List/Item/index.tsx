@@ -2,7 +2,6 @@ import {
   Accordion,
   ActionIcon,
   Badge,
-  Chip,
   Flex,
   Image,
   Popover,

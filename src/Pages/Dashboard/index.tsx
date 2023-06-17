@@ -1,4 +1,4 @@
-import { Button, Container, Flex, Paper } from "@mantine/core";
+import { Container } from "@mantine/core";
 import "./styles.css";
 import { HeroBullets } from "../../Components/Header";
 import Todo from "../../Components/Task";
