@@ -66,6 +66,7 @@ const Task = () => {
         break;
     }
     //set the new array
+    writeTaskToDB(newTodos[findIndex]);
     setTasks(newTodos);
   };
 
