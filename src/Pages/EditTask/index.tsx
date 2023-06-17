@@ -6,7 +6,7 @@ import { TaskType } from "../../Components/Task";
 type EditTaskProps = {
   task: TaskType;
   children: React.ReactNode;
-  handleEditTask: (values: FormDataType, id: number) => void;
+  handleEditTask: (values: FormDataType, id: string) => void;
 };
 
 const EditTask = ({ task, children, handleEditTask }: EditTaskProps) => {

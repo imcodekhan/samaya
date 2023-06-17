@@ -1,11 +1,15 @@
-import { STATUS, dummyData } from "./constant";
-import { formatAddFormValuesToTask, formatEditFormValuesToTask } from "./utils";
+import { STATUS } from "./constant";
+import {
+  formatAddFormValuesToTask,
+  formatEditFormValuesToTask,
+  prioritize,
+} from "./utils";
 import { FormDataType } from "../Form";
 import View from "./View";
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
+import { readTasksFromDB, writeTaskToDB } from "../../DB/utils";
 export type TaskType = {
-  id: number;
+  id: string;
   title: string;
   description: string;
   status: string;
@@ -15,7 +19,8 @@ export type TaskType = {
   completionDate?: Date | null;
   skippedDate?: Date | null;
   tag: string;
-  priority: number;
+  priorityRanking: number;
+  quadrant: number;
   important: boolean;
   urgent: boolean;
   estimatedTimeInMins: number;
@@ -24,12 +29,18 @@ export type TaskType = {
 export type TaskListType = TaskType[];
 
 const Task = () => {
-  const [tasks, setTasks] = useState<TaskListType>([...dummyData]);
+  const [tasks, setTasks] = useState<TaskListType>([]);
   const [selectedFilter, setSelectedFilter] = useState<string>(STATUS.PENDING);
+
+  useEffect(() => {
+    readTasksFromDB().then((data) => {
+      setTasks([...prioritize([...Object.keys(data).map((key) => data[key])])]);
+    });
+  }, []);
 
   const handleAction = (
     action: string,
-    payload: { id: number; date?: Date | null }
+    payload: { id: string; date?: Date | null }
   ): void => {
     const findIndex = tasks.findIndex((task) => task.id === payload.id);
     //remove the item from the array by index
@@ -60,16 +71,19 @@ const Task = () => {
 
   const handleAddTask = (values: FormDataType) => {
     const newTask = formatAddFormValuesToTask(values);
-    setTasks((prev) => [...prev, newTask]);
+    writeTaskToDB(newTask);
+    setTasks((prev) => [...prioritize([...prev, newTask])]);
   };
 
-  const handleEditTask = (values: FormDataType, id: number) => {
+  const handleEditTask = (values: FormDataType, id: string) => {
     const findIndex = tasks.findIndex((task) => task.id === id);
     const newTodos = [...tasks];
+    const editedTask = formatEditFormValuesToTask(values, tasks[findIndex]);
+    writeTaskToDB(editedTask);
     newTodos[findIndex] = {
-      ...formatEditFormValuesToTask(values, tasks[findIndex]),
+      ...editedTask,
     };
-    setTasks(newTodos);
+    setTasks([...prioritize([...newTodos])]);
   };
 
   return (
